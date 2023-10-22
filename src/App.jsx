@@ -11,17 +11,34 @@ function App() {
 
   useEffect(() => {
     const storedBorderRadius = localStorage.getItem("borderRadius");
+    const storedBorderColor = localStorage.getItem("borderColor");
+    const storedImage = localStorage.getItem("image");
     if (storedBorderRadius) {
       setBorderRadius(storedBorderRadius);
+    }
+    if (storedBorderColor) {
+      setBorderColor(storedBorderColor);
+    }
+    if (storedImage !== "https://placehold.co/300") {
+      setImage(storedImage);
     }
   }, []);
 
   function handleImageChange(n) {
     setImage(defaultImages[n]);
+    storeImage();
   }
 
   function storeBorderRadius() {
     localStorage.setItem("borderRadius", borderRadius);
+  }
+
+  function storeBorderColor() {
+    localStorage.setItem("borderColor", borderColor);
+  }
+
+  function storeImage() {
+    localStorage.setItem("image", image);
   }
 
   return (
@@ -41,7 +58,7 @@ function App() {
       </div>
       <input type="file" accept="image/*" onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))} />
       <label htmlFor="borderColor">Choose border color:</label>
-      <input type="color" onChange={(e) => setBorderColor(e.target.value)} value={borderColor} />{" "}
+      <input type="color" onChange={(e) => setBorderColor(e.target.value)} value={borderColor} onBlur={storeBorderColor} />
       <label htmlFor="borderRadius">Adjust border radius:</label>
       <input
         type="range"
