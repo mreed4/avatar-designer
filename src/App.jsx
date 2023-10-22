@@ -1,35 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const defaultImages = ["https://picsum.photos/id/237/300", "https://picsum.photos/id/238/300", "https://picsum.photos/id/239/300"];
+  const [image, setImage] = useState("https://placehold.co/300");
+  const [borderColor, setBorderColor] = useState("#ff0000");
+  const [borderRadius, setBorderRadius] = useState(1);
+
+  useEffect(() => {
+    const storedBorderRadius = localStorage.getItem("borderRadius");
+    if (storedBorderRadius) {
+      setBorderRadius(storedBorderRadius);
+    }
+  }, []);
+
+  function handleImageChange(n) {
+    setImage(defaultImages[n]);
+  }
+
+  function storeBorderRadius() {
+    localStorage.setItem("borderRadius", borderRadius);
+  }
 
   return (
     <>
+      <h1>Avatar Designer</h1>
+      <p>Upload your image or try one of the provided options:</p>
+      <img
+        src={image}
+        className="avatar"
+        alt="avatar"
+        style={{ borderColor, borderWidth: 4, borderStyle: "solid", borderRadius: `${borderRadius}rem` }}
+      />
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <button onClick={() => handleImageChange(0)}>Image 1</button>
+        <button onClick={() => handleImageChange(1)}>Image 2</button>
+        <button onClick={() => handleImageChange(2)}>Image 3</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <input type="file" accept="image/*" onChange={(e) => setImage(URL.createObjectURL(e.target.files[0]))} />
+      <label htmlFor="borderColor">Choose border color:</label>
+      <input type="color" onChange={(e) => setBorderColor(e.target.value)} value={borderColor} />{" "}
+      <label htmlFor="borderRadius">Adjust border radius:</label>
+      <input
+        type="range"
+        min="1"
+        max="3"
+        step="0.25"
+        onChange={(e) => setBorderRadius(e.target.value)}
+        onBlur={storeBorderRadius}
+        value={borderRadius}
+      />{" "}
+      <input
+        type="number"
+        onChange={(e) => setBorderRadius(e.target.value)}
+        onBlur={storeBorderRadius}
+        value={borderRadius}
+        min="1"
+        max="3"
+        step="0.25"
+      />{" "}
+      rem
     </>
-  )
+  );
 }
 
-export default App
+export default App;

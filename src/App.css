@@ -40,3 +40,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.avatar {
+  width: 300px;
+  height: 300px;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5em;
+}
+
+input[type="number"] {
+  width: 3.5em;
+  font-family: monospace;
+}
+
+img {
+  object-fit: cover;
+}
